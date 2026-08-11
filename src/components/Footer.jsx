@@ -104,9 +104,15 @@ export default function Footer() {
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-6 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
-          <p className="text-xs text-white/45">
-            © {year} {company.name}. All rights reserved.
-          </p>
+          <div className="space-y-1">
+            <p className="text-xs text-white/45">
+              © {year} {company.name}. All rights reserved.
+            </p>
+            <p className="text-xs text-white/35">
+              Design & development by{' '}
+              <span className="text-white/55">B&amp;C Software &amp; Web</span>
+            </p>
+          </div>
           <p className="max-w-2xl text-xs leading-relaxed text-white/40">
             This website is a professional presentation mockup. Property listings and
             opportunities shown are illustrative examples and do not constitute offers,
