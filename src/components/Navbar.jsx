@@ -38,7 +38,7 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
         solid
           ? 'bg-navy-deep/95 shadow-lg shadow-navy/20 backdrop-blur-md'
           : 'bg-transparent'
@@ -52,7 +52,7 @@ export default function Navbar() {
           to="/"
           className="group flex items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass"
         >
-          <span className="flex h-9 w-9 items-center justify-center border border-brass/60 text-brass transition group-hover:border-brass group-hover:bg-brass/10">
+          <span className="flex h-9 w-9 items-center justify-center border border-brass/60 text-brass transition duration-300 group-hover:border-brass group-hover:bg-brass/10">
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden="true">
               <path
                 d="M4 18V10L12 4L20 10V18H15V13H9V18H4Z"
@@ -92,44 +92,76 @@ export default function Navbar() {
 
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded p-2 text-white transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass lg:hidden"
+          className="relative inline-flex h-10 w-10 items-center justify-center rounded text-white transition duration-300 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? 'Close menu' : 'Open menu'}
           onClick={() => setOpen((v) => !v)}
         >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          <Menu
+            className={`absolute h-6 w-6 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              open ? 'scale-75 rotate-90 opacity-0' : 'scale-100 rotate-0 opacity-100'
+            }`}
+            aria-hidden="true"
+          />
+          <X
+            className={`absolute h-6 w-6 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              open ? 'scale-100 rotate-0 opacity-100' : 'scale-75 -rotate-90 opacity-0'
+            }`}
+            aria-hidden="true"
+          />
         </button>
       </nav>
 
       <div
         id="mobile-menu"
-        className={`border-t border-white/10 bg-navy-deep lg:hidden ${
-          open ? 'block' : 'hidden'
+        className={`grid overflow-hidden bg-navy-deep transition-[grid-template-rows,opacity,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden ${
+          open
+            ? 'grid-rows-[1fr] border-t border-white/10 opacity-100'
+            : 'pointer-events-none grid-rows-[0fr] border-t border-transparent opacity-0'
         }`}
       >
-        <ul className="flex flex-col gap-1 px-6 py-6">
-          {links.map((link) => (
-            <li key={link.to}>
-              <NavLink
-                to={link.to}
-                end={link.to === '/'}
-                className={({ isActive }) =>
-                  `block py-3 text-base font-medium tracking-wide transition ${
-                    isActive ? 'text-brass-light' : 'text-white/85 hover:text-white'
-                  }`
-                }
+        <div className="min-h-0">
+          <ul className="flex flex-col gap-1 px-6 py-6">
+            {links.map((link, index) => (
+              <li
+                key={link.to}
+                className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  open
+                    ? 'translate-y-0 opacity-100'
+                    : 'translate-y-3 opacity-0'
+                }`}
+                style={{
+                  transitionDelay: open ? `${120 + index * 70}ms` : '0ms',
+                }}
               >
-                {link.label}
-              </NavLink>
+                <NavLink
+                  to={link.to}
+                  end={link.to === '/'}
+                  className={({ isActive }) =>
+                    `block py-3 text-base font-medium tracking-wide transition-colors duration-300 ${
+                      isActive ? 'text-brass-light' : 'text-white/85 hover:text-white'
+                    }`
+                  }
+                >
+                  {link.label}
+                </NavLink>
+              </li>
+            ))}
+            <li
+              className={`pt-4 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                open ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'
+              }`}
+              style={{
+                transitionDelay: open ? `${120 + links.length * 70}ms` : '0ms',
+              }}
+            >
+              <Button to="/membership/apply" variant="gold" className="w-full">
+                Join Now
+              </Button>
             </li>
-          ))}
-          <li className="pt-4">
-            <Button to="/membership/apply" variant="gold" className="w-full">
-              Join Now
-            </Button>
-          </li>
-        </ul>
+          </ul>
+        </div>
       </div>
     </header>
   )
