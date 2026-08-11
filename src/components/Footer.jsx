@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Share2, Globe, Mail, Phone } from 'lucide-react'
 import { company } from '../data/content'
 
@@ -11,12 +11,24 @@ const footerLinks = [
 
 export default function Footer() {
   const year = new Date().getFullYear()
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const goToHomeTop = (e) => {
+    e.preventDefault()
+    if (location.pathname !== '/') {
+      navigate('/')
+    }
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+    })
+  }
 
   return (
     <footer className="bg-navy-deep text-white">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:py-20">
         <div className="lg:col-span-5">
-          <Link to="/" className="inline-flex items-center gap-3">
+          <Link to="/" onClick={goToHomeTop} className="inline-flex items-center gap-3">
             <span className="flex h-9 w-9 items-center justify-center border border-brass/60 text-brass">
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden="true">
                 <path
